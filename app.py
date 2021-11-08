@@ -58,7 +58,7 @@ def gm(project = 'press'):
         
         org_topic_count_HORIZEO = prediction_stack_grouped_count_topic_actor[prediction_stack_grouped_count_topic_actor['section'] == 'HORIZEO']
         
-        org_count_HORIZEO['name'] = np.where(org_count_HORIZEO['count']< 5, 'Other organizations', org_count_HORIZEO['actors_names'])
+        org_count_HORIZEO['name'] = np.where(org_count_HORIZEO['count']< 3, 'Other organizations', org_count_HORIZEO['actors_names'])
         
         topic_count_HORIZEO['name'] = np.where(topic_count_HORIZEO['count']< 0, 'Other topic', topic_count_HORIZEO['topic_name'])
         
