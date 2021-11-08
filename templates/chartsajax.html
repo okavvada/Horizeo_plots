@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <h1>Controversy Plots - HORIZEO</h1>
+
+    <label for="docs">Choose analysis documents:</label>
+
+        <select name="docs" id="docs" class="docs">
+          <option value="press">Press Reviews</option>
+          <option value="verbatims">Verbatims</option>
+        </select>
+
+    <div id="charts"></div>
+</body>
+
+<script>
+    async function fetcher() {
+        const chartsDiv = document.getElementById('charts');
+        chartsDiv.innerHTML = '';
+        const response = await fetch("/callback?data=" + document.getElementById("docs").value);
+        const jsonResponse = await response.json();
+        jsonResponse.forEach((figure, i) => {
+            const divId = `charts${i}`;
+            const div = document.createElement('div')
+            div.setAttribute('id', divId);
+            charts.appendChild(div)
+            Plotly.newPlot(divId, figure, {});
+        });
+    }
+    fetcher();
+    document.querySelector('.docs').addEventListener('change', fetcher)
+    
+
+    </script>
+</html>
