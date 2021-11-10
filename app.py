@@ -178,6 +178,9 @@ def gm(project = 'press'):
         figures = [fig, fig2, fig3, fig4]
 
 
+    # with open('data/{}_data.json'.format(project), 'w') as f:
+    #     json.dump(figures, f, cls=plotly.utils.PlotlyJSONEncoder)
+
     return  json.dumps(figures, cls=plotly.utils.PlotlyJSONEncoder)
 
 
