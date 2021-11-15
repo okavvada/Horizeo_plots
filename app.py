@@ -91,7 +91,15 @@ def gm(project = 'press'):
         top10_orgs_HORIZEO = org_count_HORIZEO.sort_values('count',ascending = False).head(15)['actors_names'].values
         org_topic_count_df_HORIZEO_stack_sub = org_topic_count_HORIZEO[org_topic_count_HORIZEO['actors_names'].isin(top10_orgs_HORIZEO)]
         
-        fig3 = px.bar(org_topic_count_df_HORIZEO_stack_sub, x="actors_names", y="count", color="topic_name", title="Topics mentioned by top 15 orgs in HORIZEO")
+        fig3 = px.bar(org_topic_count_df_HORIZEO_stack_sub, x="actors_names", y="count", color="topic_name", title="Topics mentioned by top 15 orgs in HORIZEO", 
+            color_discrete_map={
+                "Project's impact on environment and biodiversity": "#636EFA",
+                'Process of public consultation': "#EF553B",
+                "Project's contribution to green economy": "#00CC96",
+                'Renewable energy importance in local energy transition': "#AB63FA"},
+            category_orders={"topic_name": ["Project's impact on environment and biodiversity", 'Process of public consultation', 
+                                            "Project's contribution to green economy", 'Renewable energy importance in local energy transition'],
+                              })
         fig3.update_layout(
                 height=600, width=1200,
                 title_text="Topics mentioned by top 15 orgs in HORIZEO")
@@ -143,15 +151,15 @@ def gm(project = 'press'):
 
 
         specs2 = [[{'type':'domain'},  {'type':'domain'}]]
-        fig2 = make_subplots(rows=1, cols=2, specs=specs)
-        fig2.add_trace(go.Pie(labels=list(topic_count_Saucats.topic_name), values=list(topic_count_Saucats['count']), name="Saucats"),
+        fig2 = make_subplots(rows=1, cols=2, specs=specs2)
+        fig2.add_trace(go.Pie(labels=list(topic_count_Saucats.topic_name), values=list(topic_count_Saucats['count']), name="Saucats",sort=False),
               1, 1)
-        fig2.add_trace(go.Pie(labels=list(topic_count_Bordeux.topic_name), values=list(topic_count_Bordeux['count']), name="Bordeaux"),
+        fig2.add_trace(go.Pie(labels=list(topic_count_Bordeux.topic_name), values=list(topic_count_Bordeux['count']), name="Bordeaux",sort=False),
               1, 2)
 
 
         # Use `hole` to create a donut-like pie chart
-        fig2.update_traces(hole=.30, hoverinfo="label+percent", textposition='inside')
+        fig2.update_traces(hole=.30, hoverinfo="label+percent", textposition='inside', marker=dict(colors=['#636EFA', '#FFA15A', '#00CC96',"#AB63FA"]))
 
         fig2.update_layout(
             height=700, width=1000,
@@ -160,26 +168,72 @@ def gm(project = 'press'):
                  dict(text='Bordeaux', x=0.92, y=1.07, font_size=20, showarrow=False),
                 ])
 
+        verbatims_df_without_PA = verbatims_df[~verbatims_df['org'].isin(["Commission nationale du débat public", 
+                                               "Commission particulière du débat public", 
+                                               "ENGIE", 
+                                               "Neoen", 
+                                               "Réseau Transport d’Electricité"])]
+        prediction_stack_grouped_topic_without_PA = verbatims_df_without_PA.groupby(['city', 'topic_name'])
+        prediction_stack_grouped_count_topic_without_PA = prediction_stack_grouped_topic_without_PA['position'].count().reset_index().rename(columns={'position': 'count'})
+
+        topic_count_Saucats_without_PA = prediction_stack_grouped_count_topic_without_PA[prediction_stack_grouped_count_topic_without_PA['city'] == 'Saucats']
+        topic_count_Bordeux_without_PA = prediction_stack_grouped_count_topic_without_PA[prediction_stack_grouped_count_topic_without_PA['city'] == 'Bordeaux']
+
+        specs5 = [[{'type':'domain'},  {'type':'domain'}]]
+        fig5 = make_subplots(rows=1, cols=2, specs=specs5)
+        fig5.add_trace(go.Pie(labels=list(topic_count_Saucats_without_PA.topic_name), values=list(topic_count_Saucats_without_PA['count']), name="Saucats",sort=False),
+              1, 1)
+        fig5.add_trace(go.Pie(labels=list(topic_count_Bordeux_without_PA.topic_name), values=list(topic_count_Bordeux_without_PA['count']), name="Bordeaux",sort=False),
+              1, 2)
+
+
+        # Use `hole` to create a donut-like pie chart
+        fig5.update_traces(hole=.30, hoverinfo="label+percent", textposition='inside', marker=dict(colors=['#636EFA', '#FFA15A', '#00CC96',"#AB63FA"]))
+
+        fig5.update_layout(
+            height=700, width=1000,
+            title_text="Topics presence in Verbatims without Project Actors",
+            annotations=[dict(text='Saucats', x=0.15, y=1.07, font_size=20, showarrow=False),
+                 dict(text='Bordeaux', x=0.92, y=1.07, font_size=20, showarrow=False),
+        ])
+
         top10_orgs_Saucats = org_count_Saucats.sort_values('count',ascending = False).head(15)['org'].values
         org_topic_count_df_Saucats_stack_sub = org_topic_count_Saucats[org_topic_count_Saucats['org'].isin(top10_orgs_Saucats)]
 
-        fig3 = px.bar(org_topic_count_df_Saucats_stack_sub, x="org", y="count", color="topic_name", title="Topics mentioned by top 15 orgs in Saucats")
+        fig3 = px.bar(org_topic_count_df_Saucats_stack_sub, x="org", y="count", color="topic_name", title="Topics mentioned by top 15 orgs in Saucats",
+            color_discrete_map={
+                "Project's impact on environment and biodiversity": "#636EFA",
+                "Project's floods and fire risks": "#FFA15A",
+                "Project's contribution to green economy": "#00CC96",
+                'Renewable energy importance in local energy transition': "#AB63FA"},
+            category_orders={"topic_name": ["Project's impact on environment and biodiversity", "Project's floods and fire risks", 
+                                            "Project's contribution to green economy", 'Renewable energy importance in local energy transition'],
+                              })
         fig3.update_layout(
                 height=700, width=1200,
                 title_text="Topics mentioned by top 15 orgs in Saucats")
 
+
         top10_orgs_Bordeaux = org_count_Bordeux.sort_values('count',ascending = False).head(15)['org'].values
         org_topic_count_df_Bordeaux_stack_sub = org_topic_count_Bordeux[org_topic_count_Bordeux['org'].isin(top10_orgs_Bordeaux)]
-        fig4 = px.bar(org_topic_count_df_Bordeaux_stack_sub, x="org", y="count", color="topic_name", title="Topics mentioned by top 15 orgs in Bordeaux")
+        fig4 = px.bar(org_topic_count_df_Bordeaux_stack_sub, x="org", y="count", color="topic_name", title="Topics mentioned by top 15 orgs in Bordeaux",
+            color_discrete_map={
+                "Project's impact on environment and biodiversity": "#636EFA",
+                "Project's floods and fire risks": "#FFA15A",
+                "Project's contribution to green economy": "#00CC96",
+                'Renewable energy importance in local energy transition': "#AB63FA"},
+            category_orders={"topic_name": ["Project's impact on environment and biodiversity", "Project's floods and fire risks", 
+                                            "Project's contribution to green economy", 'Renewable energy importance in local energy transition'],
+                              })
         fig4.update_layout(
            height=700, width=1200,
                 title_text="Topics mentioned by top 15 orgs in Bordeaux")
 
-        figures = [fig, fig2, fig3, fig4]
+        figures = [fig, fig2, fig5, fig3, fig4]
 
 
-    # with open('data/{}_data.json'.format(project), 'w') as f:
-    #     json.dump(figures, f, cls=plotly.utils.PlotlyJSONEncoder)
+    with open('data/{}_data.json'.format(project), 'w') as f:
+        json.dump(figures, f, cls=plotly.utils.PlotlyJSONEncoder)
 
     return  json.dumps(figures, cls=plotly.utils.PlotlyJSONEncoder)
 
