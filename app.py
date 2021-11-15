@@ -71,7 +71,7 @@ def gm(project = 'press'):
         fig.update_traces(hole=.3, hoverinfo="label+percent", textposition='inside')
 
         fig.update_layout(
-            height=400, width=900,
+            height=500, width=900,
             title_text="Actors presence in Press Reviews")
 
 
@@ -85,7 +85,7 @@ def gm(project = 'press'):
         fig2.update_traces(hole=.3, hoverinfo="label+percent", textposition='inside')
 
         fig2.update_layout(
-            height=400, width=1000,
+            height=500, width=1000,
             title_text="Topics presence in Press Reviews")
 
         top10_orgs_HORIZEO = org_count_HORIZEO.sort_values('count',ascending = False).head(15)['actors_names'].values
@@ -122,8 +122,8 @@ def gm(project = 'press'):
         org_count_Saucats = prediction_stack_grouped_count[prediction_stack_grouped_count['city'] == 'Saucats']
         org_count_Bordeux = prediction_stack_grouped_count[prediction_stack_grouped_count['city'] == 'Bordeaux']
 
-        org_count_Saucats['orgs'] = np.where(org_count_Saucats['count']< 2300, 'Other organizations', org_count_Saucats['org'])
-        org_count_Bordeux['orgs'] = np.where(org_count_Bordeux['count']< 2300, 'Other organizations', org_count_Bordeux['org'])
+        org_count_Saucats['orgs'] = np.where(org_count_Saucats['count']< 1800, 'Other organizations', org_count_Saucats['org'])
+        org_count_Bordeux['orgs'] = np.where(org_count_Bordeux['count']< 1800, 'Other organizations', org_count_Bordeux['org'])
 
         topic_count_Saucats = prediction_stack_grouped_count_topic[prediction_stack_grouped_count_topic['city'] == 'Saucats']
         topic_count_Bordeux = prediction_stack_grouped_count_topic[prediction_stack_grouped_count_topic['city'] == 'Bordeaux']
