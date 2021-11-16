@@ -125,6 +125,8 @@ def gm(project = 'press'):
         org_count_Saucats['orgs'] = np.where(org_count_Saucats['count']< 1800, 'Other organizations', org_count_Saucats['org'])
         org_count_Bordeux['orgs'] = np.where(org_count_Bordeux['count']< 1800, 'Other organizations', org_count_Bordeux['org'])
 
+        print(org_count_Saucats['orgs'].unique())
+
         topic_count_Saucats = prediction_stack_grouped_count_topic[prediction_stack_grouped_count_topic['city'] == 'Saucats']
         topic_count_Bordeux = prediction_stack_grouped_count_topic[prediction_stack_grouped_count_topic['city'] == 'Bordeaux']
 
